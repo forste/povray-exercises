@@ -21,7 +21,7 @@ light_source {
 
 #declare Egg_upperpart =
   intersection{
-    sphere{<0,0,0>,1 scale<1,1.75,1>}
+    sphere{<0,0,0>,1 scale <1,1.75,1>}
     box{<-1,0,-1>,<1,1.75,1>}
   }
 
@@ -37,4 +37,5 @@ light_source {
     texture{Egg_Tex}
   }
 
-object { Egg scale .7 rotate x*20 translate<1,0,0>}
+object { Egg scale .7 rotate <0,0,-45> translate <1,-1,0>}
+//object { Egg scale .7 translate <1,-1,0>}

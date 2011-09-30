@@ -1,0 +1,1 @@
+povray $1.pov && eog $1.png

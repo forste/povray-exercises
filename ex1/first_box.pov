@@ -29,6 +29,14 @@ light_source {
   finish { ambient 0.2 diffuse 0.5 }
 }
 
+// box {
+  //   <0,0,0>,
+  //   <1,1,1>
+  //   pigment { color Blue }
+  //   rotate y*35
+  //   rotate x*-5
+  // }
+
 mesh {
   /* top side */
   triangle {

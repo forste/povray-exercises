@@ -15,23 +15,26 @@ light_source {
   color White
 }
 
-#declare Egg_Tex = texture {
+#declare EGG_TEX = texture {
   pigment{color Yellow}
 }
 
-#declare Egg_upperpart =
+#declare EGG_RADIUS = 1.5;
+#declare EGG_UPPER_HALF_Y_SCALE = 1.75;
+
+#declare EGG_UPPERPART =
   intersection{
-    sphere{<0,0,0>,1 scale <1,1.75,1>}
-    box{<-1,0,-1>,<1,1.75,1>}
+    sphere{<0,0,0>,EGG_RADIUS scale <1,EGG_UPPER_HALF_Y_SCALE,1>}
+    box{<-EGG_RADIUS,0,-EGG_RADIUS>,<EGG_RADIUS,EGG_UPPER_HALF_Y_SCALE*EGG_RADIUS,EGG_RADIUS>}
   }
 
-#declare Egg_lowerpart =
+#declare EGG_LOWERPART =
   intersection{
-    sphere{<0,0,0>,1 scale<1,1,1>}
-    box{<-1,-1,-1>,<1,0,1>}
+    sphere{<0,0,0>,EGG_RADIUS}
+    box{<-EGG_RADIUS,-EGG_RADIUS,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
   }
 
-#declare Egg =
+#declare EGG =
   union{ object{Egg_upperpart }
     object{Egg_lowerpart}
     texture{Egg_Tex}

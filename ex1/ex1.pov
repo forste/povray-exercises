@@ -10,7 +10,7 @@ camera {
 }
 
 light_source {
-  <6,7,0>
+  <9,15,-3>
   color White
 }
 
@@ -23,6 +23,14 @@ plane {
   pigment {
     color White
   }
+  finish {
+    reflection {
+      .45
+    }
+    
+    
+  }
+  
 }
 
 //
@@ -220,28 +228,30 @@ plane {
 //////////////////// EGG ////////////////////
 //
 
-#declare Egg_Tex = texture {
+#declare EGG_TEX = texture {
   pigment{color Yellow}
 }
 
-#declare Egg_upperpart =
+#declare EGG_RADIUS = 2.5;
+#declare EGG_UPPER_HALF_Y_SCALE = 1.75;
+
+#declare EGG_UPPERPART =
   intersection{
-    sphere{<0,0,0>,1 scale <1,1.75,1>}
-    box{<-1,0,-1>,<1,1.75,1>}
+    sphere{<0,0,0>,EGG_RADIUS scale <1,EGG_UPPER_HALF_Y_SCALE,1>}
+    box{<-EGG_RADIUS,0,-EGG_RADIUS>,<EGG_RADIUS,EGG_UPPER_HALF_Y_SCALE*EGG_RADIUS,EGG_RADIUS>}
   }
 
-#declare Egg_lowerpart =
+#declare EGG_LOWERPART =
   intersection{
-    sphere{<0,0,0>,1 scale<1,1,1>}
-    box{<-1,-1,-1>,<1,0,1>}
+    sphere{<0,0,0>,EGG_RADIUS}
+    box{<-EGG_RADIUS,-EGG_RADIUS,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
   }
 
-#declare Egg =
-  union{ object{Egg_upperpart }
-    object{Egg_lowerpart}
-    texture{Egg_Tex}
+#declare EGG =
+  union{ object{EGG_UPPERPART }
+    object{EGG_LOWERPART}
+    texture{EGG_TEX}
   }
-
 //
 //////////////////// OBJECTS ////////////////////
 //
@@ -266,7 +276,11 @@ object {
   translate <-5,0,1>
 }
 
-
 //egg
-object { Egg }
+object {
+  EGG
+  rotate <120,35,50>
+  scale 0.7
+  translate <5,0,-2>
+}
 

@@ -147,6 +147,7 @@ plane {
 #declare PEN_RADIUS_BOT = 0.33;
 #declare PEN_RADIUS_MID = 0.30;
 #declare PEN_RADIUS_TOP = PEN_RADIUS_BOT;
+#declare PEN_RADIUS_TOP_DIFF = 0.03;
 #declare PEN_X_START = 0;
 #declare PEN_L_BOT = 0.2;
 #declare PEN_L_MID = 4.5;
@@ -170,7 +171,6 @@ plane {
   #else
     #local PEN_X = sqrt(pow(PEN_L,2)-pow(PEN_Y_DIFF,2));
     #debug concat("PEN_X:",str(PEN_X, 5, 5), "\n")
-
   #end
   
   #local COS_BETA = PEN_X / PEN_L;
@@ -203,7 +203,7 @@ plane {
       PEN_RADIUS_BOT            
       pigment {
 	color White 
-     }
+      }
     }
     cylinder {
       <PEN_X_START + PEN_X_BOT, PEN_Y_START + (PEN_Y_BOT * PEN_Y_MOD), PEN_Z>
@@ -213,14 +213,49 @@ plane {
 	color Color
       }
     }
-    cylinder {
-      <PEN_X_START + PEN_X_BOT + PEN_X_MID, PEN_Y_START + ((PEN_Y_BOT + PEN_Y_MID)*PEN_Y_MOD), PEN_Z>
-      <PEN_X_START + PEN_X_BOT + PEN_X_MID + PEN_X_TOP, PEN_Y_START + ((PEN_Y_BOT + PEN_Y_MID + PEN_Y_TOP)*PEN_Y_MOD), PEN_Z>
-      PEN_RADIUS_TOP
-      pigment {
-	color White
+    
+    #local XS = PEN_X_START + PEN_X_BOT + PEN_X_MID;
+    #local XE = XS + PEN_X_TOP;
+    #local YBM = PEN_Y_BOT + PEN_Y_MID;
+    #local YBMT = YBM + PEN_Y_TOP;
+    #local SINALPHA = sin(45);
+    #local Y_DIFF = PEN_RADIUS_TOP * SINALPHA;
+    #local Z_DIFF = Y_DIFF;
+    
+    #macro Make_Pen_Diff(PEN_Y_DIFF, PEN_Z_DIFF)
+      cylinder {
+	<XS,
+	PEN_Y_START + ((YBM + PEN_Y_DIFF)*PEN_Y_MOD),
+	PEN_Z + PEN_Z_DIFF>
+	<XE,
+	PEN_Y_START + ((YBMT + PEN_Y_DIFF)*PEN_Y_MOD),
+	PEN_Z + PEN_Z_DIFF>
+	PEN_RADIUS_TOP_DIFF
+	pigment {
+	  color Green
+	}
+      }
+    #end
+    
+    difference {
+      cylinder {
+	<XS, PEN_Y_START + ((YBM) * PEN_Y_MOD), PEN_Z>
+	<XE, PEN_Y_START + ((YBMT)*PEN_Y_MOD), PEN_Z>
+	PEN_RADIUS_TOP
+	pigment {
+	  color White
+	}
       }
     }
+    
+    Make_Pen_Diff(PEN_RADIUS_TOP_DIFF,0)
+    Make_Pen_Diff(Y_DIFF,Z_DIFF)
+    Make_Pen_Diff(0,PEN_RADIUS_TOP_DIFF)
+    Make_Pen_Diff(-Y_DIFF,Z_DIFF)
+    Make_Pen_Diff(-PEN_RADIUS_TOP_DIFF,0)
+    Make_Pen_Diff(-Y_DIFF,-Z_DIFF)
+    Make_Pen_Diff(0,-PEN_RADIUS_TOP_DIFF)
+    Make_Pen_Diff(Y_DIFF,-Z_DIFF)
   }
 #end
 
@@ -243,8 +278,8 @@ plane {
 
 #declare EGG_LOWERPART =
   intersection{
-    sphere{<0,0,0>,EGG_RADIUS}
-    box{<-EGG_RADIUS,-EGG_RADIUS,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
+    sphere{<0,EGG_RADIUS,0>,EGG_RADIUS}
+    box{<-EGG_RADIUS,0,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
   }
 
 #declare EGG =

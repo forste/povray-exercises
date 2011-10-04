@@ -13,23 +13,36 @@ light_source {
   color White
 }
 
-cylinder {
+#declare PB_BOT = cylinder {
   <1,-1,0>,
   <1,0.5,0>,
   0.5
   pigment { color Grey }
 }
 
-cylinder {
+#declare PB_TOP_INNER = cylinder {
   <1,0.5,0>,
   <1,0.6,0>,
   0.35
   pigment { color Grey }
 }
 
-torus {
+#declare PB_TOP_OUTER = torus {
   0.5, 0.08          // major and minor radius
 //  rotate -90*x      // so we can see it from the top
   pigment { Grey }
   translate <1,0.5,0>
 }
+
+union {
+  object {
+    PB_BOT
+  }
+  object {
+    PB_TOP_INNER
+  }
+  object {
+    PB_TOP_OUTER
+  }
+}
+  

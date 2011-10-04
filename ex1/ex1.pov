@@ -233,7 +233,7 @@ plane {
 }
 
 #declare EGG_RADIUS = 2.5;
-#declare EGG_UPPER_HALF_Y_SCALE = 1.75;
+#declare EGG_UPPER_HALF_Y_SCALE = 1.5;
 
 #declare EGG_UPPERPART =
   intersection{
@@ -252,6 +252,55 @@ plane {
     object{EGG_LOWERPART}
     texture{EGG_TEX}
   }
+
+
+//
+//////////////////// PHOTOBOX ////////////////////
+//
+
+#declare PB_TEX = texture {
+  pigment { color Grey }
+}
+
+#declare PB_BOT = cylinder {
+  <1,0,0>,
+  <1,1.5,0>,
+  0.5
+  texture {
+    PB_TEX
+  }
+}
+
+#declare PB_TOP_INNER = cylinder {
+  <1,1.5,0>,
+  <1,1.6,0>,
+  0.35
+  texture {
+    PB_TEX
+  }
+}
+
+#declare PB_TOP_OUTER = torus {
+  0.5, 0.08          // major and minor radius
+//  rotate -90*x      // so we can see it from the top
+  texture {
+    PB_TEX
+  }
+  translate <1,1.5,0>
+}
+
+#declare PB = union {
+  object {
+    PB_BOT
+  }
+  object {
+    PB_TOP_INNER
+  }
+  object {
+    PB_TOP_OUTER
+  }
+}
+
 //
 //////////////////// OBJECTS ////////////////////
 //
@@ -276,11 +325,23 @@ object {
   translate <-5,0,1>
 }
 
+object {
+  Make_Pen(Green, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
+  rotate y*-160
+  translate <3.7,3,-1.5>
+}
+
 //egg
 object {
   EGG
-  rotate <120,35,50>
+  rotate <120,70,60>
   scale 0.7
   translate <5,0,-2>
 }
 
+//photobox
+object {
+  PB
+  scale 1.9
+  translate <1.5,0,0.8>
+}

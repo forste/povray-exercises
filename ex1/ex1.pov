@@ -70,21 +70,24 @@ plane {
    RX_BOX_MAIN_START_Z - STICKER_DEPTH>
   pigment { color Blue }
   finish {
-    	 reflection {
-            	    .15
-    		    }
+    ambient 0.25
   }
 }
 
-#declare RX_BOX_TOP = box {
-  <RX_BOX_MAIN_START_X + STICKER_MARGIN,
-   RX_BOX_MAIN_START_Y + RX_BOX_MAIN_WIDTH,
-   RX_BOX_MAIN_START_Z + STICKER_MARGIN>
-  <RX_BOX_MAIN_START_X + RX_BOX_MAIN_WIDTH - STICKER_MARGIN,
-   RX_BOX_MAIN_START_Y + RX_BOX_MAIN_WIDTH + STICKER_DEPTH,
-   RX_BOX_MAIN_START_Z + RX_BOX_MAIN_WIDTH - STICKER_MARGIN>
-  pigment { color Orange }
-}
+#macro Make_RX_BOX_TOP(TOPCOLOR)
+  box {
+    <RX_BOX_MAIN_START_X + STICKER_MARGIN,
+    RX_BOX_MAIN_START_Y + RX_BOX_MAIN_WIDTH,
+    RX_BOX_MAIN_START_Z + STICKER_MARGIN>
+    <RX_BOX_MAIN_START_X + RX_BOX_MAIN_WIDTH - STICKER_MARGIN,
+    RX_BOX_MAIN_START_Y + RX_BOX_MAIN_WIDTH + STICKER_DEPTH,
+    RX_BOX_MAIN_START_Z + RX_BOX_MAIN_WIDTH - STICKER_MARGIN>
+    pigment { color TOPCOLOR }
+    finish {
+      ambient 0.25
+    }
+  }
+#end
 										 
                                                                           	  
 #declare RX_BOX_RIGHT = box {
@@ -94,44 +97,56 @@ plane {
   <RX_BOX_MAIN_START_X + RX_BOX_MAIN_WIDTH + STICKER_DEPTH,
    RX_BOX_MAIN_START_Y + RX_BOX_MAIN_WIDTH - STICKER_MARGIN,
    RX_BOX_MAIN_START_Z + RX_BOX_MAIN_WIDTH - STICKER_MARGIN>
-  pigment { color White }
-}
-
-#declare RX_BOX = union {
-    	 object { RX_BOX_MAIN }
-    	 object { RX_BOX_TOP }
-    	 object { RX_BOX_FRONT }
-    	 object { RX_BOX_RIGHT }
-
-}
-
-#declare RX_ROW = union {
-   object { RX_BOX }
-   object { RX_BOX
-   translate RX_BOX_MAIN_WIDTH*x
-   }
-  object { RX_BOX
-  translate RX_BOX_MAIN_WIDTH*x*2
-   }
-}
-
-#declare RX_FLOOR = union {
-  object { RX_ROW }
-  object { RX_ROW
-  translate RX_BOX_MAIN_WIDTH*z
+  pigment {
+    color rgb<1,1,1>
   }
-  object { RX_ROW
-  translate RX_BOX_MAIN_WIDTH*z*2
+  finish {
+    ambient 0.3
   }
+  
+  
 }
+
+#macro Make_RX_BOX(TOPCOLOR)
+  union {
+    object { RX_BOX_MAIN }
+    Make_RX_BOX_TOP(TOPCOLOR)
+    object { RX_BOX_FRONT }
+    object { RX_BOX_RIGHT }
+  }
+#end
+
+#macro Make_RX_ROW(TOPCOLOR)
+  union {
+    object { Make_RX_BOX(TOPCOLOR) }
+    object { Make_RX_BOX(TOPCOLOR)
+      translate RX_BOX_MAIN_WIDTH*x
+    }
+    object { Make_RX_BOX(TOPCOLOR)
+      translate RX_BOX_MAIN_WIDTH*x*2
+    }
+  }
+#end
+
+#macro Make_RX_FLOOR(TOPCOLOR)
+  union {
+    object { Make_RX_ROW(TOPCOLOR) }
+    object { Make_RX_ROW(TOPCOLOR)
+      translate RX_BOX_MAIN_WIDTH*z
+    }
+    object { Make_RX_ROW(TOPCOLOR)
+      translate RX_BOX_MAIN_WIDTH*z*2
+    }
+  }
+#end
 
 #declare RX_CUBE = union {
-  object { RX_FLOOR
+  object { Make_RX_FLOOR(Black)
   }
-  object { RX_FLOOR
+  object { Make_RX_FLOOR(Black)
     translate RX_BOX_MAIN_WIDTH*y
   }
-  object { RX_FLOOR
+  object { Make_RX_FLOOR(Orange)
     translate RX_BOX_MAIN_WIDTH*y*2
     rotate y*-25
   }
@@ -218,9 +233,11 @@ plane {
     #local XE = XS + PEN_X_TOP;
     #local YBM = PEN_Y_BOT + PEN_Y_MID;
     #local YBMT = YBM + PEN_Y_TOP;
-    #local SINALPHA = sin(45);
-    #local Y_DIFF = PEN_RADIUS_TOP * SINALPHA;
+    // #local SINALPHA = sin(45);
+    // #local Y_DIFF = PEN_RADIUS_TOP * SINALPHA;
+    #local Y_DIFF = PEN_RADIUS_TOP/sqrt(2);
     #local Z_DIFF = Y_DIFF;
+
     
     #macro Make_Pen_Diff(PEN_Y_DIFF, PEN_Z_DIFF)
       cylinder {
@@ -231,9 +248,9 @@ plane {
 	PEN_Y_START + ((YBMT + PEN_Y_DIFF)*PEN_Y_MOD),
 	PEN_Z + PEN_Z_DIFF>
 	PEN_RADIUS_TOP_DIFF
-	pigment {
-	  color Green
-	}
+	// pigment {
+	//   color Grey
+	// }ü
       }
     #end
     
@@ -245,17 +262,21 @@ plane {
 	pigment {
 	  color White
 	}
+	finish {
+	  ambient 0.3
+	}
       }
+      Make_Pen_Diff(PEN_RADIUS_TOP,0)
+      Make_Pen_Diff(Y_DIFF,Z_DIFF)
+      Make_Pen_Diff(0,PEN_RADIUS_TOP)
+      Make_Pen_Diff(-Y_DIFF,Z_DIFF)
+      Make_Pen_Diff(-PEN_RADIUS_TOP,0)
+      Make_Pen_Diff(-Y_DIFF,-Z_DIFF)
+      Make_Pen_Diff(0,-PEN_RADIUS_TOP)
+      Make_Pen_Diff(Y_DIFF,-Z_DIFF)
     }
     
-    Make_Pen_Diff(PEN_RADIUS_TOP_DIFF,0)
-    Make_Pen_Diff(Y_DIFF,Z_DIFF)
-    Make_Pen_Diff(0,PEN_RADIUS_TOP_DIFF)
-    Make_Pen_Diff(-Y_DIFF,Z_DIFF)
-    Make_Pen_Diff(-PEN_RADIUS_TOP_DIFF,0)
-    Make_Pen_Diff(-Y_DIFF,-Z_DIFF)
-    Make_Pen_Diff(0,-PEN_RADIUS_TOP_DIFF)
-    Make_Pen_Diff(Y_DIFF,-Z_DIFF)
+
   }
 #end
 
@@ -264,7 +285,18 @@ plane {
 //
 
 #declare EGG_TEX = texture {
-  pigment{color Yellow}
+  pigment {
+    marble
+    turbulence 0.5
+    color_map {
+      [0.00 color Black]
+      [0.80 color White]
+    }
+    rotate 50*z
+  }
+  finish {
+    reflection 0.1
+  }
 }
 
 #declare EGG_RADIUS = 2.5;
@@ -273,28 +305,38 @@ plane {
 #declare EGG_UPPERPART =
   intersection{
     sphere{<0,0,0>,EGG_RADIUS scale <1,EGG_UPPER_HALF_Y_SCALE,1>}
-    box{<-EGG_RADIUS,0,-EGG_RADIUS>,<EGG_RADIUS,EGG_UPPER_HALF_Y_SCALE*EGG_RADIUS,EGG_RADIUS>}
+    box{<-EGG_RADIUS,0,-EGG_RADIUS>,
+      <EGG_RADIUS, EGG_UPPER_HALF_Y_SCALE * EGG_RADIUS,EGG_RADIUS>}
   }
 
 #declare EGG_LOWERPART =
   intersection{
-    sphere{<0,EGG_RADIUS,0>,EGG_RADIUS}
-    box{<-EGG_RADIUS,0,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
+    sphere{<0,0,0>,EGG_RADIUS}
+    box{<-EGG_RADIUS,-EGG_RADIUS,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
   }
 
 #declare EGG =
-  union{ object{EGG_UPPERPART }
+  union{
+    object{EGG_UPPERPART }
     object{EGG_LOWERPART}
     texture{EGG_TEX}
+    translate y
   }
-
 
 //
 //////////////////// PHOTOBOX ////////////////////
 //
 
 #declare PB_TEX = texture {
-  pigment { color Grey }
+  pigment {
+    color rgb<0.10,0.10,0.10>
+  }
+  finish {
+    reflection {
+      .18
+    }
+  }
+  
 }
 
 #declare PB_BOT = cylinder {
@@ -350,7 +392,7 @@ object {
   translate <-1.5,0,-1.8>
 }  
 object {
-  Make_Pen(Red, PEN_RADIUS_BOT, PEN_RADIUS_TOP)
+  Make_Pen(rgb<0.9,0,0.5>, PEN_RADIUS_BOT, PEN_RADIUS_TOP)
   rotate y*160
   translate <4,0,-1>
 }
@@ -361,7 +403,7 @@ object {
 }
 
 object {
-  Make_Pen(Green, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
+  Make_Pen(rgb<1 ,0 ,1>, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
   rotate y*-160
   translate <3.7,3,-1.5>
 }
@@ -371,7 +413,7 @@ object {
   EGG
   rotate <120,70,60>
   scale 0.7
-  translate <5,0,-2>
+  translate <5,0.7,-2>
 }
 
 //photobox

@@ -7,14 +7,14 @@
 
 #include "colors.inc"
 
-#declare LS = <9,15,2>;
+#declare LS = <30,45,15>;
 
 background {
   color White
 }
 
 camera {
-  location <0,9,-9>
+  location <0,8.5,-9>
   look_at  <0, 0, 0>
 }
 
@@ -24,7 +24,7 @@ light_source {
   looks_like {
     sphere {
       LS
-      5
+      8
     }
   }
 }
@@ -66,7 +66,7 @@ plane {
    RX_BOX_MAIN_START_Z+RX_BOX_MAIN_WIDTH>
   pigment { color Black }
   finish {
-    phong .75
+    phong .80
     phong_size 150
   }
 }
@@ -386,10 +386,15 @@ object { RX_CUBE rotate y*45}
 
 //pens
 object {
-  Make_Pen(Yellow, PEN_RADIUS_MID*2*1.5, PEN_RADIUS_TOP)
+  Make_Pen(rgb<233,241,24>/195, PEN_RADIUS_MID*2*1.5, PEN_RADIUS_TOP)
   rotate y*25
   translate <-1.5,0,-1.8>
-}  
+  finish {
+    ambient 0.60
+    reflection 0.6
+  }
+}
+
 object {
   Make_Pen(rgb<0.9,0,0.5>, PEN_RADIUS_BOT, PEN_RADIUS_TOP)
   rotate y*160
@@ -401,10 +406,11 @@ object {
   translate <-5,0,1>
 }
 
+//purple
 object {
   Make_Pen(rgb<1 ,0 ,1>, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
   rotate y*-160
-  translate <3.7,3,-1.5>
+  translate <3.7,2.7,-1.5>
 }
 
 //egg

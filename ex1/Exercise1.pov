@@ -7,18 +7,26 @@
 
 #include "colors.inc"
 
+#declare LS = <9,15,2>;
+
 background {
   color White
 }
 
 camera {
-  location <0,11,-11>
+  location <0,9,-9>
   look_at  <0, 0, 0>
 }
 
 light_source {
-  <9,15,2>
+  LS
   color White
+  looks_like {
+    sphere {
+      LS
+      5
+    }
+  }
 }
 
 //
@@ -58,9 +66,9 @@ plane {
    RX_BOX_MAIN_START_Z+RX_BOX_MAIN_WIDTH>
   pigment { color Black }
   finish {
-    	 phong .75
-    	 phong_size 150
-    	 }
+    phong .75
+    phong_size 150
+  }
 }
 
 #declare RX_BOX_FRONT = box {
@@ -105,8 +113,6 @@ plane {
   finish {
     ambient 0.3
   }
-  
-  
 }
 
 #macro Make_RX_BOX(TOPCOLOR)
@@ -405,8 +411,8 @@ object {
 object {
   EGG
   rotate <120,70,60>
-  scale 0.7
-  translate <5,0.7,-2>
+  scale <0.5,0.5,0.5> 
+  translate <3,0.7,-2>
 }
 
 //photobox

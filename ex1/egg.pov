@@ -19,23 +19,13 @@ light_source {
   pigment{color Yellow}
 }
 
-#declare Egg_upperpart =
-  intersection{
-    sphere{<0,0,0>,1 scale <1,1.75,1>}
-    box{<-1,0,-1>,<1,1.75,1>}
-  }
 
-#declare Egg_lowerpart =
-  intersection{
-    sphere{<0,0,0>,1 scale<1,1,1>}
-    box{<-1,-1,-1>,<1,0,1>}
-  }
 
 #declare Egg =
-  union{ object{Egg_upperpart }
-    object{Egg_lowerpart}
+  union{
+    sphere{<0,0,0>,1 scale<1.2,1,1>}
     texture{Egg_Tex}
   }
 
-object { Egg rotate <0,0,-45> translate <1,-1,0>}
+object { Egg rotate <0,-25,0>}
 //object { Egg scale .7 translate <1,-1,0>}

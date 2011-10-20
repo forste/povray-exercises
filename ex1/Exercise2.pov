@@ -284,44 +284,58 @@ plane {
 //////////////////// EGG ////////////////////
 //
 
+#declare EGG_TEX_BLACK = rgb<0,0,0>;
+#declare EGG_TEX_BEIG = rgb<151,140,118>/130;
+
 #declare EGG_TEX = texture {
   pigment {
     marble
     turbulence 0.5
     color_map {
-      [0.00 color Black]
-      [0.80 color White]
+      [0.00 color EGG_TEX_BLACK]
+      [0.50 color EGG_TEX_BEIG]
+      [0.95 color EGG_TEX_BLACK]
     }
-    rotate 50*z
   }
   finish {
-    reflection 0.1
+    reflection 0.3
   }
 }
 
-#declare EGG_RADIUS = 2.5;
-#declare EGG_UPPER_HALF_Y_SCALE = 1.5;
+// #declare EGG_RADIUS = 2.5;
+// #declare EGG_UPPER_HALF_Y_SCALE = 1.5;
 
-#declare EGG_UPPERPART =
-  intersection{
-    sphere{<0,0,0>,EGG_RADIUS scale <1,EGG_UPPER_HALF_Y_SCALE,1>}
-    box{<-EGG_RADIUS,0,-EGG_RADIUS>,
-      <EGG_RADIUS, EGG_UPPER_HALF_Y_SCALE * EGG_RADIUS,EGG_RADIUS>}
-  }
+// #declare EGG_UPPERPART =
+//   intersection{
+//     sphere{<0,0,0>,EGG_RADIUS scale <1,EGG_UPPER_HALF_Y_SCALE,1>}
+//     box{<-EGG_RADIUS,0,-EGG_RADIUS>,
+//       <EGG_RADIUS, EGG_UPPER_HALF_Y_SCALE * EGG_RADIUS,EGG_RADIUS>}
+//   }
 
-#declare EGG_LOWERPART =
-  intersection{
-    sphere{<0,0,0>,EGG_RADIUS}
-    box{<-EGG_RADIUS,-EGG_RADIUS,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
-  }
+// #declare EGG_LOWERPART =
+//   intersection{
+//     sphere{<0,0,0>,EGG_RADIUS}
+//     box{<-EGG_RADIUS,-EGG_RADIUS,-EGG_RADIUS>,<EGG_RADIUS,0,EGG_RADIUS>}
+//   }
+
+// #declare EGG =
+//   union{
+//     object{EGG_UPPERPART }
+//     object{EGG_LOWERPART}
+//     texture{EGG_TEX}
+//     translate y
+//   }
 
 #declare EGG =
-  union{
-    object{EGG_UPPERPART }
-    object{EGG_LOWERPART}
-    texture{EGG_TEX}
-    translate y
-  }
+//  union{
+    sphere{
+      <0,0,0>,1
+      scale<1.2,1,1>
+      texture{
+	EGG_TEX
+      }
+    }
+//  }
 
 //
 //////////////////// PHOTOBOX ////////////////////
@@ -385,8 +399,12 @@ plane {
 object { RX_CUBE rotate y*45}
 
 //pens
+#declare PEN_TEX_PURPLE = rgb<153,64,117>/145;
+#declare PEN_TEX_RED = rgb<186,64,57>/155;
+#declare PEN_TEX_YELLOW = rgb<190,139,46>/155;
+#declare PEN_TEX_LIGHTRED = rgb<159,83,90>/145;
 object {
-  Make_Pen(rgb<233,241,24>/195, PEN_RADIUS_MID*2*1.5, PEN_RADIUS_TOP)
+  Make_Pen(PEN_TEX_YELLOW, PEN_RADIUS_MID*2*1.5, PEN_RADIUS_TOP)
   rotate y*25
   translate <-1.5,0,-1.8>
   finish {
@@ -396,29 +414,35 @@ object {
 }
 
 object {
-  Make_Pen(rgb<0.9,0,0.5>, PEN_RADIUS_BOT, PEN_RADIUS_TOP)
+  Make_Pen(PEN_TEX_LIGHTRED, PEN_RADIUS_BOT, PEN_RADIUS_TOP)
   rotate y*160
   translate <4,0,-1>
 }
 object {
-  Make_Pen(Red, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
+  Make_Pen(PEN_TEX_RED, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
   rotate y*50
   translate <-5,0,1>
 }
 
 //purple
 object {
-  Make_Pen(rgb<1 ,0 ,1>, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
+  Make_Pen(PEN_TEX_PURPLE, PEN_RADIUS_BOT, PEN_RADIUS_TOP*2*1.3)
   rotate y*-160
   translate <3.7,2.7,-1.5>
 }
 
 //egg
+// object {
+//   EGG
+//   rotate <120,70,60>
+//   scale <0.5,0.5,0.5> 
+//   translate <3,0.7,-2>
+// }
 object {
   EGG
-  rotate <120,70,60>
-  scale <0.5,0.5,0.5> 
-  translate <3,0.7,-2>
+  scale 1.55
+  rotate <0,-35,0>
+  translate <4.5,0.7,-2>
 }
 
 //photobox

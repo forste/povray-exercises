@@ -1,8 +1,6 @@
-//TODO use random characteristics, use fuzzy texture
-
 #include "colors.inc"
 
-#declare DEPTH = 80;
+#declare DEPTH = 200;
 
 #declare MIN_LEVEL = 9;
 #declare T_MAJ_INIT = 5;
@@ -10,8 +8,9 @@
 #declare T_MIN = 0.2;
 #declare T_TRANS_INIT = <0,0,0>;
 #declare T_TRANS_INC = <0,T_MIN,0>;
-#declare CAMERA_DISTANCE_TO_T = 8;
 #declare Random_1 = seed(1153);
+#declare CAMERA=T_TRANS_INC*DEPTH;
+#declare LIGHT=<0,0,0>;
 
 #macro Make_Torus(major, minor)
   torus {
@@ -22,15 +21,13 @@
 	color rgb<rand(Random_1),rand(Random_1),rand(Random_1)>
       }
       finish {
-	reflection {
-	  .18
-	}
+	      ambient 0.35
       }
     }
-  }
+    
+ }
 #end
 
-#declare CAMERA_Y=CAMERA_DISTANCE_TO_T;
 #macro Make_Tornado(
   in_level, //number of torus
   maj_init, //size of major radius of first (bottom) torus
@@ -88,17 +85,17 @@
 /***************************** OBJECTS ******************************/
 
 camera {
-  location <0,20,0>
+  location CAMERA
   look_at <0,0,0>
 }
 
 light_source {
-  <0,0,5>
+  LIGHT
   White
 }
 
 background {
-  color Yellow
+  color Black
 }
 
 Make_Tornado(DEPTH, T_MAJ_INIT, T_MAJ_INC, T_TRANS_INC, T_MIN, 8000)

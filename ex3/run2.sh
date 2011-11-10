@@ -1,0 +1,1 @@
+povray $1.pov && gwenview $1.png &b

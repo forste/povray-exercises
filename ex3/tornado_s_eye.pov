@@ -41,6 +41,7 @@
   #local level = in_level;
   #local maj_inc = maj_inc_default;
   #local maj_max_this = 0;
+  //The loop creates the most outer tornado by creating and stacking torus
   #while(level>0)
     #if(maj < maj_max)
       object {
@@ -76,6 +77,7 @@
     #end
   #end
   #if(in_level>MIN_LEVEL)
+      //recursive call creating a smaller tornado in the center of the previous one
     Make_Tornado(
       in_level/2,
       maj_init/2,

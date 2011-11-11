@@ -1,0 +1,14 @@
+the tornado's eye:
+
+In my work I use recursions and loopse to create subsequent tornados.
+
+The loop creates the most outer tornado by creating and stacking torus. Each torus's color as well as it's position and size are subject to randomization.
+
+After all torus of the current tornado are created a recursive call is issued which creates a smaller tornado in the center of the previous one.
+
+The recursion stops until a certain level has been reached. Current Configuration creates 4 Tornados with levels 100, 50, 25 and 12.
+
+Background and light source are kept simple in order to focus on tornados.
+
+
+

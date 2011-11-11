@@ -22,7 +22,6 @@
       }
       finish {
 	      ambient 0.35
-	      reflection 0.35
       }
     }
     
@@ -66,7 +65,7 @@
 	#local maj_max_this = maj;
       #end
 
-      #local trans_random = 10;
+      #local trans_random = 30;
       #local trans_x = rand(Random_1)/trans_random*x;
       #local trans_z = rand(Random_1)/trans_random*z;
       #local trans = trans+trans_inc+trans_x+trans_z;
@@ -106,13 +105,25 @@ background {
 
 plane {
   y, 0
-  pigment {
-    color White
+  texture {
+    pigment {
+      color Black
+    }
   }
-  finish {
-    ambient 0.35
-    reflection 0.50
-  }
+  // texture{
+  //   pigment{
+  //     gradient <0,1,0>
+  //     color_map{
+  // 	[0.0 color White]
+  // 	[0.8 color rgb<0.1,0.25,0.75>]
+  // 	[1.0 color rgb<0.1,0.25,0.75>]
+  //     }
+  //   }
+  //   finish {
+  //     ambient 1
+  //     diffuse 0
+  //   }
+  // }
 }
 
 Make_Tornado(DEPTH, T_MAJ_INIT, T_MAJ_INC, T_TRANS_INC, T_MIN, 8000)

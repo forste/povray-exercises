@@ -1,6 +1,6 @@
 #include "colors.inc"
 
-#declare DEPTH = 200;
+#declare DEPTH = 100;
 
 #declare MIN_LEVEL = 9;
 #declare T_MAJ_INIT = 5;
@@ -8,9 +8,9 @@
 #declare T_MIN = 0.2;
 #declare T_TRANS_INIT = <0,0,0>;
 #declare T_TRANS_INC = <0,T_MIN,0>;
-#declare Random_1 = seed(1153);
+#declare Random_1 = seed(1000); //1153
 #declare CAMERA=T_TRANS_INC*DEPTH;
-#declare LIGHT=<0,0,0>;
+#declare LIGHT=T_TRANS_INC*DEPTH;
 
 #macro Make_Torus(major, minor)
   torus {
@@ -22,6 +22,7 @@
       }
       finish {
 	      ambient 0.35
+	      reflection 0.35
       }
     }
     
@@ -64,7 +65,12 @@
       #if(maj > maj_max_this)
 	#local maj_max_this = maj;
       #end
-      #local trans = trans+trans_inc;
+
+      #local trans_random = 10;
+      #local trans_x = rand(Random_1)/trans_random*x;
+      #local trans_z = rand(Random_1)/trans_random*z;
+      #local trans = trans+trans_inc+trans_x+trans_z;
+      
       #local level = level-1;
     #else
       #local level = 0;
@@ -96,6 +102,17 @@ light_source {
 
 background {
   color Black
+}
+
+plane {
+  y, 0
+  pigment {
+    color White
+  }
+  finish {
+    ambient 0.35
+    reflection 0.50
+  }
 }
 
 Make_Tornado(DEPTH, T_MAJ_INIT, T_MAJ_INC, T_TRANS_INC, T_MIN, 8000)
